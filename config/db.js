@@ -1,10 +1,10 @@
 /*connexion a la base de données*/
 const mongoose = require("mongoose");
 /*on dit a mongoose de se connecter a la base de données mongoDB*/
-const URL = process.env.MONGODB_URL
+const DB_USER_PASS=process.env.DB_USER_PASS
 mongoose
   .connect(
-    URL,
+    "mongodb+srv://" + DB_USER_PASS + "@cluster0.ybrn2fj.mongodb.net/test",
     {
     //   userNewUrlParser: true,
     //   useUnifiedTopology: true,
