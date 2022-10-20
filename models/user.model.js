@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 const { isEmail } = require("validator");
 const bcrypt = require ('bcrypt');
-
+// objet de la bibliothéque mongoose "Schema"
 const userShema = new mongoose.Schema({
   pseudo: {
     type: String,
@@ -9,7 +9,7 @@ const userShema = new mongoose.Schema({
     minLenght: 3,
     maxlength: 55,
     unique: true,
-    trim: true,
+    trim: true,  // <= permet de supprimer les espaces à la fin du pseudo
   },
   email: {
     type: String,
@@ -51,11 +51,12 @@ const userShema = new mongoose.Schema({
 
 // play function before save into display : 'block',
 userShema.pre('save', async function(next){
-  // on crypt le MDP 
+  // on salt le MDP 
   const salt = await bcrypt.genSalt();
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
-// on oublie pas d'exporter 
 const UserModel = mongoose.model('user', userShema);
+// on oublie pas d'exporter 
+
 module.exports = UserModel;
