@@ -41,32 +41,98 @@ module.exports.udpateUser = async (req, res) => {
         }
       },
       //paramétre obligatoire avec une route PUT
-      {new :true, upsert: true, setDefaultsOnInsert : true},
-      (err,data) =>{
-        if(!err) return res.send(data);
-        if(err) return res.status(500).send({message : err});
+      { new: true, upsert: true, setDefaultsOnInsert: true },
+      (err, data) => {
+        if (!err) return res.send(data);
+        if (err) return res.status(500).send({ message: err });
       }
     )
-  } catch(err) {
+  } catch (err) {
     //res.status(500).json({message :err})
   }
 };
 
 //DELETE 
-module.exports.deleteUser = async(req, res)=> {
+module.exports.deleteUser = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
-  // SI  l'id est connu ! tu retourne !
-  return res.status(400).send("ID unknow : " + req.params.id);
-  
+    // SI  l'id est connu ! tu retourne !
+    return res.status(400).send("ID unknow : " + req.params.id);
+
   try {
-    await UserModel.deleteOne({_id : req.params.id}).exec();
-     return res.status(200).send("Delete completed for : " + req.params.id);
+    await UserModel.deleteOne({ _id: req.params.id }).exec();
+    return res.status(200).json({ "Delete completed for :": req.params.id });
   }
-  catch(err){
-    res.status(500).json({message : err});
+  catch (err) {
+    res.status(500).json({ message: err });
   }
+
+};
+
+
+
+module.exports.follow = async (req, res) => {
+
+  if (!ObjectID.isValid(req.params.id) || !ObjectID.isValid(req.body.idToFollow ))
+    // SI  l'id est connu ! tu retourne !
+    return res.status(400).send("ID unknow : " + req.params.id);
+  try {
+    await UserModel.findByIdAndUpdate(
+      //add to the follower list
+      req.params.id,
+      //tu ajoute avec addToSet celui qui suit (following a l'id de celui suivi)
+      { $addToSet: { following: req.body.idToFollow } },
+      { new: true, upsert: true },
+      //callback
+      (err, docs) => {
+        if (!err) res.status(201).json(docs);
+        else return res.status(400).json(err.docs)
+      });
+
+    //add to following list
+    await UserModel.findByIdAndUpdate(
+      req.body.idToFollow,
+      { $addToSet: { followers : req.body.id}},
+      { new: true, upsert: true },
+      //callback
+      (err) => {
+       // if (!err) res.status(201).json(docs); impossible de repondre deux fois a la requete
+        if(err) return res.status(400).json(err)
+
+
+      })
+
     
-  };
+
+
+  }
+  catch (err) {
+    res.status(500).json({ message: err });
+  }
+};
+
+
+
+module.exports.unfollow = async (req, res) => {
+  if (!ObjectID.isValid(req.params.id))
+    // SI  l'id est connu ! tu retourne !
+    return res.status(400).send("ID unknow : " + req.params.id);
+  try {
+    //add to the follower list
+    req.params.id,
+      //tu ajoute avec addToSet celui qui suit (following a l'id de celui suivi)
+      { $addToSet: { unfollowing: req.body.idToUnfollow } },
+      { new: true, upsert: true },
+      //callback
+      (err, docs) => {
+        if (!err) res.status(201).json(docs);
+        else return res.status(400).json(err.docs)
+      };
+
+  }
+  catch (err) {
+    res.status(500).json({ message: err });
+  }
+};
 
 
 

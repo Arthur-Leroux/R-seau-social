@@ -11,6 +11,8 @@ router.get(`/:id`, userController.userInfo);
 //method PUT pour faire des update avec l'id 
 router.put("/:id", userController.udpateUser);
 //method DELETE pour supprimer
-router.delete("/:id", userController.deleteUser)
-
+router.delete("/:id", userController.deleteUser);
+//method PATCH pour mettre a jour le tableau 
+router.patch("/follow/:id", userController.follow);
+router.patch("/unfollow/:id", userController.unfollow);
 module.exports = router;
