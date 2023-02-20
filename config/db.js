@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const DB_USER_PASS = process.env.DB_USER_PASS;
 mongoose
   .connect(
-    "mongodb+srv://" + DB_USER_PASS + "@cluster0.ybrn2fj.mongodb.net/mern-project"
+    "mongodb+srv://" + process.env.DB_USER_PASS + "@cluster0.ybrn2fj.mongodb.net/mern-project"
   )
   /*Pour nous nous dire qu'on a relier notre Back a notre base de données*/
   .then(() => console.log("Connected to MongoDB"))

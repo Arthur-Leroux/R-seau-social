@@ -25,7 +25,7 @@ const userShema = new mongoose.Schema({
     max: 1024,
     minLenght: 6,
   },
-  picture : {
+  picture: {
     type :String,
     default : "./uploads/profils/random-user.png"
   },

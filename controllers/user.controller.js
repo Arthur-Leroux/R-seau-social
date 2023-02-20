@@ -13,7 +13,7 @@ module.exports.getAllUsers = async (req, res) => {
 };
 // un user
 module.exports.userInfo = (req, res) => {
-  // req.params récupere les infos dde l'URL
+  // req.params récupere les infos de l'URL
   console.log(req.params);
   if (!ObjectID.isValid(req.params.id))
     // SI jamais l'id est connu tu retourne
@@ -48,6 +48,25 @@ module.exports.udpateUser = async (req, res) => {
       }
     )
   } catch(err) {
-    res.status(500).json({message :err})
+    //res.status(500).json({message :err})
   }
 };
+
+//DELETE 
+module.exports.deleteUser = async(req, res)=> {
+  if (!ObjectID.isValid(req.params.id))
+  // SI  l'id est connu ! tu retourne !
+  return res.status(400).send("ID unknow : " + req.params.id);
+  
+  try {
+    await UserModel.deleteOne({_id : req.params.id}).exec();
+     return res.status(200).send("Delete completed for : " + req.params.id);
+  }
+  catch(err){
+    res.status(500).json({message : err});
+  }
+    
+  };
+
+
+

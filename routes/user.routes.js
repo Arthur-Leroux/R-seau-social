@@ -10,5 +10,7 @@ router.get("/", userController.getAllUsers);
 router.get(`/:id`, userController.userInfo);
 //method PUT pour faire des update avec l'id 
 router.put("/:id", userController.udpateUser);
+//method DELETE pour supprimer
+router.delete("/:id", userController.deleteUser)
 
 module.exports = router;
