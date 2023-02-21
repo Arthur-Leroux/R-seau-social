@@ -1,4 +1,5 @@
 const UserModel =require ("../models/user.model");
+const jwt = require('jsonwebtoken');
 // fonction asynchrone qui appelle signUp
 
 module.exports.signUp = async (req, res) => {
@@ -16,3 +17,16 @@ module.exports.signUp = async (req, res) => {
     res.status(200).send({ err });
   }
 };
+module.exports.signIn = async (req,res) =>{
+  const { email, password} = req.body
+  try {
+ const user = await UserModel.login(email,password);
+ const verify = await jwt.verify(token,process.env.SECRET_KEY);
+  }catch(err){
+
+  }
+};
+
+module.exports.logout =async (req,res) => {
+
+} 
