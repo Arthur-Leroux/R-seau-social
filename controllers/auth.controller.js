@@ -1,5 +1,9 @@
 const UserModel =require ("../models/user.model");
 const jwt = require('jsonwebtoken');
+const cookieParser = require ("cookie-parser");
+
+
+
 // fonction asynchrone qui appelle signUp
 
 module.exports.signUp = async (req, res) => {
@@ -17,16 +21,32 @@ module.exports.signUp = async (req, res) => {
     res.status(200).send({ err });
   }
 };
-module.exports.signIn = async (req,res) =>{
-  const { email, password} = req.body
-  try {
- const user = await UserModel.login(email,password);
- const verify = await jwt.verify(token,process.env.SECRET_KEY);
-  }catch(err){
+//vie du token
+const maxAge = 3 * 24 * 60 * 60 * 1000 
+//fonction création du token 
+const TOKEN_SECRET = process.env.TOKEN_SECRET
+const createToken = (id) => {
+  return jwt.sign({id}, TOKEN_SECRET, {
+    expiresIn:  maxAge
+  })
 
+};
+module.exports.signIn = async (req,res) =>{
+  const { email , password} = req.body
+  try {
+ const user = await UserModel.login(email,password);// on tcheck si les utilisateurs existe dans la DB
+ const token = createToken(user._id);// on créer un token pour (user)
+ //httpOnly pour la sécurité du token, consultable que sur notre serveur
+ //en parametre le framework JWT, la création du token et la sécurité
+ res.cookie('jwt', token, {httpOnly : true, maxAge : maxAge});
+ res.status(200).json ({user : user._id + "login is successfully"}) // permet d'avertir
+
+ 
+  }catch(err){
+    res.status(200).json (err)
   }
 };
 
-module.exports.logout =async (req,res) => {
+module.exports.logout = async (req,res) => {
 
 } 
