@@ -67,7 +67,7 @@ const auth = bcrypt.compare(password, user.password);
 }
   throw Error ('incorrect password');
 }
-  throw Error ('incorrect email')
+  throw Error ('incorrect email');
 }
 
 

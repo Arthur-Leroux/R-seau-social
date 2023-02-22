@@ -24,8 +24,9 @@ module.exports.signUp = async (req, res) => {
 //vie du token
 const maxAge = 3 * 24 * 60 * 60 * 1000 
 //fonction création du token 
-const TOKEN_SECRET = process.env.TOKEN_SECRET
+
 const createToken = (id) => {
+  const TOKEN_SECRET = process.env.TOKEN_SECRET
   return jwt.sign({id}, TOKEN_SECRET, {
     expiresIn:  maxAge
   })
@@ -39,11 +40,12 @@ module.exports.signIn = async (req,res) =>{
  //httpOnly pour la sécurité du token, consultable que sur notre serveur
  //en parametre le framework JWT, la création du token et la sécurité
  res.cookie('jwt', token, {httpOnly : true, maxAge : maxAge});
- res.status(200).json ({user : user._id + "login is successfully"}) // permet d'avertir
+ res.status(201).json ({user : user._id + "login is successfully"}) // permet d'avertir
 
  
   }catch(err){
     res.status(200).json (err)
+    console.log(err)
   }
 };
 
