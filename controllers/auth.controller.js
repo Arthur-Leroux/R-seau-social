@@ -32,7 +32,7 @@ const createToken = (id) => {
   })
 
 };
-module.exports.signIn = async (req,res) =>{
+module.exports.signIn = async (req,res) => {
   const { email , password} = req.body
   try {
  const user = await UserModel.login(email,password);// on tcheck si les utilisateurs existe dans la DB
@@ -40,7 +40,7 @@ module.exports.signIn = async (req,res) =>{
  //httpOnly pour la sécurité du token, consultable que sur notre serveur
  //en parametre le framework JWT, la création du token et la sécurité
  res.cookie('jwt', token, {httpOnly : true, maxAge : maxAge});
- res.status(201).json ({user : user._id + "login is successfully"}) // permet d'avertir
+ res.status(200).json ({user : user._id + "login is successfully"}) // permet d'avertir
 
  
   }catch(err){
@@ -50,5 +50,7 @@ module.exports.signIn = async (req,res) =>{
 };
 
 module.exports.logout = async (req,res) => {
-
-} 
+res.cookie('jwt', '', {maxAge : 1}); // on précise se qu'on veux faire avec le cookie
+res.redirect('/'); // on redirige vers la pages que l'on veux 
+ 
+};
