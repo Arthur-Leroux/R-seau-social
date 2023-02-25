@@ -5,9 +5,12 @@ const userRoutes = require("./routes/user.routes");
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser')
 require("dotenv").config({ path: "./config/.env" });
+//jwt
+const {checkUser, requireAuth} = require('./middleware/auth.middleware')
+
 /*On averti le server de la BD */
 require("./config/db");
-const {checkUser} = require('./middleware/auth.middleware ')
+
 /*A chaque fois que app est appeler se sera le framework express  */
 const app = express();
 // !!! ne pas oublier d'appeler !!!
@@ -19,6 +22,10 @@ app.use(cookieParser());
 //'*' toutes les routes 
 //tu check si l'utilisateur est connecté
 app.get('*', checkUser)
+//a l'appel de l'authentification tu renvoie le callback de l'user 
+app.get ('/jwtid', requireAuth,(req,res) =>{
+  res.status(200).send(res.locals.user._id);
+} )
 // route USER => user.routes.js
 
 app.use("/api/user", userRoutes);
