@@ -6,6 +6,8 @@ const { signUpErrors } = require("../utils/error.utils");
 
 
 
+
+
 // fonction asynchrone qui appelle signUp
 
 module.exports.signUp = async (req, res) => {
@@ -20,8 +22,8 @@ module.exports.signUp = async (req, res) => {
     //res
     res.status(201).json({ user: user._id });
   } catch (err) {
-    const errors = signUpErrors(err);
-    res.status(200).send({ errors });
+    //const errors = signUpErrors(err);
+    res.status(200).send({ err });
   }
 };
 //vie du token 
