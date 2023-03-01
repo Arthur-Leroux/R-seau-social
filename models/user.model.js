@@ -6,7 +6,7 @@ const userShema = new mongoose.Schema({
   pseudo: {
     type: String,
     required: true,
-    minLenght: 3,
+    minlenght: 3,
     maxlength: 55,
     unique: true,
     trim: true,  // <= permet de supprimer les espaces à la fin du pseudo
@@ -16,6 +16,7 @@ const userShema = new mongoose.Schema({
     required: true,
     validate: [isEmail],
     lowercase: true,
+    unique: true,
     trim: true,
   },
 
@@ -23,7 +24,7 @@ const userShema = new mongoose.Schema({
     type: String,
     required: true,
     max: 1024,
-    minLenght: 6,
+    minlenght: 6,
   },
   picture: {
     type :String,
@@ -56,10 +57,11 @@ userShema.pre('save', async function(next){
   this.password = await bcrypt.hash(this.password, salt);
   next();
 });
-
+// fonction async pour le login 
 userShema.statics.login =  async function(email, password) {
 const user = await this.findOne({email});
 
+// et on compare le mot de passe crypté avec celui de l'utilisateur
 if(user){
 const auth = bcrypt.compare(password, user.password);
  if (auth){

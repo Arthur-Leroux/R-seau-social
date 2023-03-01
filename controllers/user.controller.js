@@ -16,7 +16,7 @@ module.exports.userInfo = (req, res) => {
   // req.params récupere les infos de l'URL
   console.log(req.params);
   if (!ObjectID.isValid(req.params.id))
-    // SI jamais l'id est connu tu retourne
+    // SI jamais l'id n'est pas connu connu tu retourne
     return res.status(400).send("ID unknow : " + req.params.id);
 
   UserModel.findById(req.params.id, (err, data) => {
@@ -28,7 +28,7 @@ module.exports.userInfo = (req, res) => {
 // update user on prend l'id si il est corret on récupére les parametres de id
 module.exports.udpateUser = async (req, res) => {
   if (!ObjectID.isValid(req.params.id))
-    // SI  l'id est connu ! tu retourne !
+    // SI  l'id n'est pas connu ! tu retourne !
     return res.status(400).send("ID unknow : " + req.params.id);
   // on récupere les parametres de l'id dans le try
   try {

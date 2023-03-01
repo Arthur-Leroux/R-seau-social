@@ -2,7 +2,7 @@
 const router = require("express").Router();
 const authController = require("../controllers/auth.controller");
 const userController = require("../controllers/user.controller");
-const UserModel = require("../models/user.model");
+//const UserModel = require("../models/user.model");
 //auth
 //méthod post pour un nouvel utilisateur fonction qui sera dans le authController
 router.post("/register", authController.signUp);
