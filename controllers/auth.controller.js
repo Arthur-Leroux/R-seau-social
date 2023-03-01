@@ -1,7 +1,7 @@
 const UserModel =require ("../models/user.model");
 const jwt = require('jsonwebtoken');
 const cookieParser = require ("cookie-parser");
-const { signUpErrors } = require("../utils/error.utils");
+const { signUpErrors, signInErrors } = require("../utils/error.utils");
 
 
 
@@ -22,8 +22,8 @@ module.exports.signUp = async (req, res) => {
     //res
     res.status(201).json({ user: user._id });
   } catch (err) {
-    //const errors = signUpErrors(err);
-    res.status(200).send({ err });
+    const errors = signUpErrors(err);
+    res.status(400).send({ errors });
   }
 };
 //vie du token 
@@ -49,7 +49,8 @@ module.exports.signIn = async (req,res) => {
 
  
   }catch(err){
-    res.status(200).json (err)
+    const errors = signInErrors(err)
+    res.status(400).send ({errors});
     console.log(err)
   }
 };
